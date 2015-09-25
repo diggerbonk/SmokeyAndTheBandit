@@ -1,0 +1,115 @@
+==============================
+GN1:0 MIDI Konverter Freeware
+      G. Nagler (c) 2004
+==============================
+
+
+[1] ZWECK
+
+GN1:0 ist ein Windows Programm (95/98/ME/2000/XP),
+das MIDI Dateien im Format 1 in Format 0 und umgekehrt 
+konvertieren kann. Das wird benötigt, wenn MIDI Geräte
+nur eines der Formate akzeptieren (oft nur Format 0).
+Das Programm liest .mid,  .kar und .rmi Dateien und erzeugt
+.mid Dateien. Einige wesentlichen MIDI Dateiinformationen
+werden aus der MIDI Datei gesammelt und präsentiert.
+Nebenbei kann das Programm Ihre MIDI Dateien 
+auf Ihrem MIDI Gerät abspielen und enthaltenen 
+synchronisierten Liedtext am Bildschirm ausgeben.
+
+Nebenbei präsentiert diese Softare wesentlich komfortablere 
+und mächtigere MIDI Werkzeuge, die neben vielen anderen MIDI 
+Aufgaben auch diese Konvertierung durchführen können. 
+Die anderen Funktionen sind in diesem Programm deaktiviert 
+und finden Sie im Programm GNMIDI. In der Hilfe finden Sie 
+Beschreibungen zu allen GNMIDI Operationen.
+Bei Interesse können Sie GNMIDI oder GNMIDFMT gerne kostenlos 
+für einige Tage ausprobieren und bei Gefallen können Sie die
+Sharewareprogramme gegen Bezahlung einer einmaligen günstigen
+Registrierungsgebühr registrieren und dann ohne 
+Demoeinschränkungen weiterbenutzen.
+
+[2] VERANTWORTUNG
+
+GN1:0 wurde für die Konvertierung von 100% kompatiblen Standard MIDI Dateien entwickelt.
+Es kann nicht garantiert werden, daß alle Ergebnisse korrekt sind, speziell nicht für inkompatible MIDI Dateien.
+Wenn Sie ein gültige MIDI Datei finden, die mit GN1:0 nicht korrekt konvertiert wird, senden Sie die Beispieldatei
+zu info@gnmidi.com 
+
+Benutzen Sie GN1:0 auf eigene Verantwortung.  Alles was Sie mit GN1:0 machen liegt in Ihrer Verantwortung 
+und nicht in der Verantwortung des Autors.  Für Schäden an Personen, Computern, Software, Hardware, Firma, Geschäft die
+durch Starten von GN1:0 entstehen, ist der Autor nicht haftbar.
+
+Wenn Sie diese Sätze nicht verstehen oder wenn sie sich nicht sicher sind, daß GN1:0 keinen Schaden bringt, dann 
+benutzen Sie es nicht. Sie sind hiermit vorgewarnt.
+
+Benutzen Sie GN1:0 nur für nicht strafbare Zwecke. 
+
+[3] COPYRIGHT
+Der Autor G. Nagler (c) 2004.
+GN1:0 ist Freeware. Die Nutzung dieser Software wird vom Autor gestattet.
+Die Verteilung der Datei gn1to0.zip ist erwünscht. 
+Verkauf oder Vermietung sowie Änderung der Dateien ist nicht gestattet.
+
+Die aktuellesten Programmversionen dieser Freeware und der GN Shareware 
+Programme finden Sie auf den Internetseiten 
+  http://www.gnmidi.com
+und 
+  http://www.gnmidi.at
+
+[4] INSTALLATION
+Entpacken Sie die Datei gn1to0.zip in ein Programmverzeichnis (z.B. legen Sie ein neues Verzeichnis an 
+C:\Programme\GN1to0 ).
+Um die integrierte Hilfe benutzen zu können muß das Programmverzeichnis ca 400K Platz für Hilfedateien haben und das 
+Programmverzeichnis darf nicht schreibgeschützt sein.
+
+[5] DEINSTALLATION
+Löschen Sie folgende Dateien in Ihrem GN1to0 Programmverzeichnis mit dem Windows Explorer:
+   gn1to0.zip
+   GN1to0.exe
+   liesmich.txt
+   readme.txt
+   bewstorm.txt
+   GN1to0tip.txt  (falls vorhanden)
+   GN1to0.hlp	(falls vorhanden)
+   GN1to0.cnt	(falls vorhanden)
+
+Löschen Sie folgende Datei aus dem Windows Verzeichnis ( meist C:\Windows ):
+   GN1to0.INI
+
+[6] HOMEPAGE
+   Die aktuellste Programmversion dieser Software finden Sie auf der 
+   GNMIDI Homepage 
+       http://www.gnmidi.com  (Kanada)
+       http://www.gnmidi.at  (Österreich)
+
+[7] BEDIENUNG
+Starten Sie GN1to0.exe und danach laden Sie eine MIDI Datei (.mid, .kar, .rmi) mit "Datei Öffnen".
+Es öffnet sich ein Fenster in dem Informationen über die MIDI Datei dargestellt werden.
+Da finden Sie auch eine Information über das MIDI Datei Format (0, 1, 2).
+Im Toolbar finden Sie einige aktivierbare Funktionsbuttons, darunter "0" oder "1" je nach Datei.
+Dieselben Funktionen finden Sie ebenfalls im Menü.
+Durch Klicken auf diese Buttons wird das Format der  MIDI Datei konvertiert in eine neue temporäre 
+MIDI Datei. Darauf öffnet sich für diese Datei ein neues Fenster mit nun geänderter Information im 
+Format, Spuranzahl, Größe. Nun können Sie das Ergebnis mit "Speichern Unter" in eine neue Datei 
+speichern. Die Originaldatei sollten Sie nur dann überschreiben, wenn Sie eine Sicherung der
+Originaldatei besitzen, denn bei der Konvertierung gehen wegen der Unterschiede der Dateiformate 
+einige Informationen verloren, die Sie nur in der Originaldatei später wiederfinden würden.
+
+Die MIDI Datei samt Karaoketextanzeige in der unteren Fensterhälfte können Sie mit der Leertaste 
+spielen und stoppen.
+Sie können ein alternatives MIDI Gerät zum Abspielen im Einstellungen Menü auswählen.
+
+Wenn Sie interessiert was die vielen GNMIDI Funktionen (auch jene die in dieser abgespeckten 
+kostenlosen Variante nicht aktiv sind) alles können, dann können Sie diese in der integrierten Hilfe 
+nachlesen. Bewegen Sie dazu die Maus über einen interessanten Button oder Menüeintrag und drücken die Taste
+F1 um die entsprechende Hilfeseite zur GNMIDI Funktion zu finden.
+
+Im Hilfemenü finden Sie auch einen Eintrag mit dem Sie auf unsere GNMIDI Homepage kommen, wo Sie 
+die Programmdemos kostenlos herunterladen und für einige Tage kostenlos ausprobieren können und 
+auch viele Informationen zu den Programmen finden (Funktionsüberblick, Funktionsliste, 
+Online Handbuch, Screenshot, Preise).
+
+Die Beispiel MIDI Datei bewstorm.mid ist eine Komposition von Günter Nagler (AKM-frei, GEMA-frei, 
+nichtkommerzielle Verwendung dieser Komposition ist gestattet). Weitere Original MIDI 
+Dateien finden Sie unter http://www2.iicm.edu/Cpub

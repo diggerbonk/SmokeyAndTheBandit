@@ -1,0 +1,13 @@
+
+September 20, 2015
+
+    * Fixed problem where game stage length was not being calculated 
+      calculated correctly.
+    * new printStats method, for printing score, stage, credits on 
+      screen
+
+September 19, 2015 - Release 1
+
+    * Initial release of Smokey and the Bandit.
+
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<gfx-xform version="1">
+    <input file="./images/smokey-and-the-bandit-logo.png" type="png" tile-width="8" tile-height="8"/>
+    <output file="./smokey-and-the-bandit-logo.inc">
+        <tiles var-name="smokeyAndTheBanditLogoTiles"/>
+        <maps pointers-size="8">
+            <map var-name="sabl_blank" left="0" top="0" width="1" height="1"/>
+            <map var-name="sabl_1" left="0" top="5" width="9" height="18"/>
+            <map var-name="sabl_2" left="0" top="0" width="9" height="5"/>
+	</maps>	
+    </output>
+</gfx-xform>

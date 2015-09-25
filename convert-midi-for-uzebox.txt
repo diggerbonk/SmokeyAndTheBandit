@@ -1,0 +1,11 @@
+How to create a music patch file
+
+* Find a midi song
+* Open it with rosegarden (import)
+* Reduce the tracks to 4 or less
+** Remember that the uzebox doesn't support polyphany within a channel, so try to pick channels that only play one note at time. 
+** Remove existing markers.
+** Create markers S (start) and E (end) at the start and end of the song.
+** Save the resulting midi file (export)
+* Convert the file from midi type 1 to type 0 (wine /home/trent/Downloads/gn1to0.exe)
+* Convert teh midi file to an uzebox patch file (java -cp /home/trent/Downloads/uzetools.jar com.belogic.uzebox.tools.converters.midi.MidiConvert -f 6 input.mid output.h)

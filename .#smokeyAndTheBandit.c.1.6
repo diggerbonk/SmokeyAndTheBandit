@@ -1,0 +1,306 @@
+/*
+ *  Controller Tester
+ *  Copyright (C) 2010  Flávio Zavan
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+//
+// Resolution is 224x224. 
+// Veritical scrolling controlled by value of Screen.scrollY
+// Screen.scrollY can be a value from 0 to 255
+// For Y: 256 scroll points - 250 max resolution = 16.
+// For vertical scrolling, create a background with height at least 256.
+//
+// Screen Layout
+//
+// +-------------------------+
+// |                         | 
+// |     224x64              | 
+// +-------------------------+  
+// |     224x160             |
+// |                         | 
+// |                         | 
+// |                         | 
+// +-------------------------+
+//
+// * The road is 160 pixels, or 20 tiles wide
+// * The road width is defined by roadStart and roadEnd variables.
+// 
+// 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19
+// 
+// Courses are defined by an unsigned char array in the following repeating format:
+// Left border, right border, length
+//
+// Similar games
+//
+//     * spy hunter
+//     * monaco GP
+//     * NES road fighter
+//     * Bump n' Jump
+//     * NES Zippy Race
+
+#include <stdbool.h>
+#include <avr/io.h>
+#include <stdlib.h>
+#include <avr/pgmspace.h>
+#include <uzebox.h>
+
+#include "data/bandit.inc"
+#include "data/tiles.inc"
+#include "data/font.inc"
+
+#define ROADMAP_LEN 128
+
+unsigned char banditX = 180;
+unsigned char banditY = 100;
+unsigned char banditSpeed = 0;
+char banditTurnRate = 0;
+unsigned int scrollMark = 0;
+char courseIndex = 0;
+
+unsigned char roadBorders[28][2];
+
+unsigned char lastRoadStart = 0;
+unsigned char roadStart = 0;
+unsigned char lastRoadEnd;
+unsigned char roadEnd = 19;
+
+bool rising = true;
+unsigned char changeCount = 0;
+
+unsigned char trackIndex = 0;
+unsigned char startIndex = 0;
+unsigned char endIndex = 0;
+
+unsigned char courseOffset = 0;
+unsigned char courseCount = 0;
+const int courseLen = 48;
+const unsigned char course[]  = {
+    0, 19, 0,  2, 5, 16,
+    0, 19, 24,  2, 5, 1,
+    0, 19, 0,  2, 5, 16,
+    1, 18, 0,  3, 6, 1,
+    1, 18, 0,  2, 5, 16,
+    5, 14, 16, 2, 5, 1,
+    5, 14, 8,  2, 5, 32,
+    5, 14, 16,  2, 5, 1
+    };
+
+void loadNextStripe(int increment){
+
+	static int srcX=95;
+	static unsigned char destX=30;
+
+    // there are three types of tile in the stripe
+    // 1) roadside 
+    // 2) border
+    // 3) stripe
+
+    while (increment > 0) {
+
+        if (courseCount == 0) {
+            roadStart = course[courseOffset++];
+            roadEnd = course[courseOffset++];
+            trackIndex = course[courseOffset++] + 2;
+            startIndex = trackIndex + course[courseOffset++];
+            endIndex = trackIndex + course[courseOffset++];
+            courseCount = course[courseOffset++];
+            if (courseOffset >= courseLen) courseOffset = 0;
+        }
+        courseCount--;
+
+        unsigned char y = 0;
+
+        while (y < roadStart) {
+            SetTile(destX, y, pgm_read_byte(&(map_terrain[trackIndex])));
+            y++;
+        }
+
+        SetTile(destX, y, pgm_read_byte(&(map_terrain[startIndex])));
+        y++;
+
+        while (y < roadEnd) {
+            SetTile(destX, y, pgm_read_byte(&(map_terrain[trackIndex+1])));
+            y++;
+        }
+
+        SetTile(destX, y, pgm_read_byte(&(map_terrain[endIndex])));
+        y++;
+
+        while (y < 20) {
+            SetTile(destX, y, pgm_read_byte(&(map_terrain[trackIndex])));
+            y++;
+        }
+
+        srcX--;
+        if (srcX < 0) srcX = 127;
+        destX--;
+        if (destX == 255) destX = 31;
+
+        increment--;
+    }
+}
+
+int main(){
+	Screen.overlayHeight=8;
+    SetSpritesTileTable(banditTiles);
+	SetTileTable(backgroundTiles);
+	SetFontTilesIndex(BACKGROUNDTILES_SIZE);
+    SetSpriteVisibility(true);
+	ClearVram();
+
+	//Main loop
+    while (1) {
+        //attractMode();
+        gameStart();
+    }
+} 
+
+void attractMode() {
+    ClearVram();
+    Screen.scrollX = 0;
+    Screen.scrollY = 0;
+    SetSpriteVisibility(false);
+//    myPrint(2,27, PSTR("CREDITS: "));
+    for (int x=0; x<128; x++) {
+	//20fps
+	WaitVsync(3);
+	DrawMap2(2,0,map_logo1);
+	DrawMap2(2,20,map_logo2);
+    }
+	
+}
+
+void gameStart() {
+    ClearVram();
+    SetSpriteVisibility(true);
+	unsigned char c;
+
+    for (unsigned char x=0; x<28; x++) {
+        for (unsigned char y=0; y<8; y++) {
+	        c=pgm_read_byte(&(map_blank[2]));
+			SetTile(x,y+VRAM_TILES_V,c);
+        }
+    }
+
+    MapSprite2(0, map_bandit, 0);
+    myPrint(2,23, PSTR("MPH"));
+    for (int x=0; x<2048; x++) {
+    myPrintInt(2,24,/*banditSpeed/2*/Screen.scrollX, 1);
+
+        doScrolling(banditSpeed/32);
+        banditX = 180 - (banditSpeed/4);
+
+        MoveSprite(0, banditX, banditY, 3, 2);
+
+        WaitVsync(1);
+
+        processControls();
+    }
+}
+
+void doScrolling(int speed) {
+
+    scrollMark += speed;
+
+    if (scrollMark >= 8) {
+        loadNextStripe(scrollMark/8);
+        scrollMark = (scrollMark%8);
+    }
+
+    Screen.scrollX -= speed;
+}
+
+
+void processControls(){
+
+	unsigned int joy=ReadJoypad(0);
+
+	if(joy&BTN_A){
+	}else if(joy&BTN_X){
+	}else if(joy&BTN_Y){
+	}else if(joy&BTN_SR){
+	}else if(joy&BTN_SL){
+	}else if(joy&BTN_UP){
+	}else if(joy&BTN_DOWN){
+	}
+
+    if (joy&BTN_LEFT) {
+        if (banditSpeed < 255) banditSpeed++;
+    }
+    else {
+        if (banditSpeed > 0) banditSpeed--;
+    }
+	
+	if(joy&BTN_UP){
+        banditTurnRate--;
+        if (banditTurnRate < -3) banditTurnRate = -3;
+	}else if(joy&BTN_DOWN){
+        banditTurnRate++;
+        if (banditTurnRate > 3) banditTurnRate = 3;
+	}
+    else if (banditTurnRate > 0) {
+        banditTurnRate--;
+    }
+    else if (banditTurnRate < 0) {
+        banditTurnRate++;
+    }
+    banditY += (banditTurnRate);
+}
+
+//Print a string from flash
+void myPrint(int x,int y,const char *string){
+	int i=0;
+	char c;
+
+	while(1){
+		c=pgm_read_byte(&(string[i++]));		
+		if(c!=0){
+            if ((c&127) < 64) {
+                c = (63 - (c&127))*2;
+            }
+            else {
+                c = ((95 - (c&127))*2)+1;
+            }
+            c = c + RAM_TILES_COUNT;		
+			SetFont(x,y--,c);
+		}else{
+			break;
+		}
+	}
+	
+}
+
+//Print an unsigned byte in decimal
+void myPrintInt(int x,int y, unsigned int val,bool zeropad){
+	unsigned char c,i;
+
+	for(i=0;i<3;i++){
+		c=val%10;
+		if(val>0 || i==0){
+            c = (RAM_TILES_COUNT + (30 - (c*2)));
+			SetFont(x,y++,c);
+		}else{
+			if(zeropad){
+				SetFont(x,y++,30+RAM_TILES_COUNT);
+			}else{
+				SetFont(x,y++,62+RAM_TILES_COUNT);
+			}
+		}
+		val=val/10;
+	}
+		
+}
+

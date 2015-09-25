@@ -1,0 +1,140 @@
+TIP0001:
+GN1to0 Freeware
+This free software gives you possibility to convert a MIDI file from type 1 into type 0 and reverse.
+The software introduces powerful facilities of Shareware GNMIDI for Windows without obligation to try or purchase the Shareware demo.
+If you are interested you may try the Shareware demo without costs for some days.
+You find newest GNMIDI Shareware demo at http://www.gnmidi.com
+After free test period expires you would need to register the software and pay a registration fee to use the GNMIDI software in future (current price is listed at GNMIDI homepage).
+
+TIP0002:
+MIDI format 1 to 0 conversion
+This function is enabled in this freeware. Some MIDI devices and MIDI programs only can use format 0 files.
+With Shareware products GNMIDFMT and GNMIDI you can do this task more comfortably, they allow to convert more files at once. 
+
+TIP0003:
+GNMIDFMT Shareware
+Shareware GNMIDFMT is very cheap; it can convert many selected files in a folder at once and can check file format validity.
+
+TIP0004:
+GNMIDI - MIDI tools for Windows
+Shareware GNMIDI is not very expensive for the large number of available MIDI operations that it contains.
+GNMIDI can comfortably convert all MIDI files with in a folder tree to format 0 at once.
+You get descriptions to many GNMIDI operations in integrated help of this program (press key F1) or use it directly with GNMIDI demo.
+
+TIP0005:
+GNMIDI checks and repairs MIDI files
+GNMIDI Shareware can check your whole MIDI archive to detect invalid files and can even repair some corrupt MIDI files.
+
+TIP0006:
+GNMIDI creates a smooth volume fade
+With GNMIDI Shareware one can simply add a volume fade-in or fade-out to a MIDI file. 
+
+TIP0007:
+GNMIDI combines several MIDI files to a medley
+With GNMIDI shareware one can connect MIDI files to one song.
+
+TIP0008:
+GNMIDI changes song volume
+With GNMIDI Shareware one can adjust volume and note velocities or set volume to a common level.
+
+TIP0009:
+GNMIDI copies a part from a MIDI song 
+With GNMIDI Shareware one can copy wanted range of an existing song into a new MIDI file.
+That is necessary sometimes when a device only accepts smaller files or songs with limited duration (e.g. cell phone).
+
+TIP0010:
+GNMIDI converts between different popular lyric formats
+With GNMIDI Shareware one can convert song text inside MIDI file into a different lyric format, which can be displayed on a keyboard display or used with other software.
+It supports very popular formats like .kar or tune1000 and also some formats used by certain devices or manufacturers.
+
+TIP0011:
+GNMIDI compresses your MIDI files
+With GNMIDI one can store MIDI files very compact (files can be compressed up to 15% smaller) without changing the musical content of the songs.
+
+TIP0012:
+GNMIDI transposes your MIDI songs
+With GNMIDI Shareware one can transpose MIDI songs to song key used by other band members to own voice or to key used in a printed score sheet.
+
+TIP0013:
+GNMIDI renumbers your MIDI file channels
+With GNMIDI Shareware one can exchange channel numbers and sort tracks in MIDI file.
+That is necessary for devices with limited note polyphony, since when the limit is reached the player needs to ignore some channels or tracks.
+
+TIP0014:
+GNMIDI tries to guess chords from your MIDI songs
+With GNMIDI Shareware one can let the software guess chords and insert them synchronized in MIDI song. Some devices can display the chord names together with song text on a display.
+
+TIP0015:
+GNMIDI splits tracks by drums, sounds or left/right piano hands
+With GNMIDI Shareware one can split song tracks by different methods.
+
+TIP0016:
+GNMIDI replaces notes according to a translation table
+GNMIDI Shareware can translate notes. That can be used to modify drum instruments in a song (each note in channel 10 is other drum).
+
+TIP0017:
+GNMIDI displays copyright
+GNMIDI Shareware can read copyright information from MIDI songs and display them.
+It can add a copyright notice to own MIDI songs and insert hidden copyright text.
+
+TIP0018:
+GNMIDI mutes melody in song
+GNMIDI Shareware can mute channels and tracks of a MIDI song in different ways. 
+That is often used for karaoke purpose, where MIDI songs are used for accompaniment to karaoke singers.
+Musicians enjoy turning off melody of a known MIDI song and play the melody self on their instrument (half playback).
+
+TIP0019:
+GNMIDI changes tempo and calculates tempo of a song
+GNMIDI Shareware contains several functions to display tempo or modify tempo.
+With the BPM tempo measuring operation you only need to click a button with the rhythm (beat) of the current playing music (e.g. CD, radio) and GNMIDI delivers estimated tempo in beats/min.
+
+TIP0020:
+Look into deepest internal secrets of a MIDI file
+GNMIDI MIDI to ASCII text conversion allows viewing the internals of a MIDI file. User may modify this text in a text editor and GNMIDI converts it back to a MIDI file.
+
+TIP0021:
+Hours of entertainment with MIDI music
+Create your own MIDI archive with your MIDI files in a directory folder on your harddisk.
+GNMIDI entertainment operation plays MIDI files from your archive in random order sequentially.
+
+TIP0022:
+GNMIDI records MIDI songs
+GNMIDI Shareware contains a MIDI recorder to record MIDI song data from your MIDI keyboard (via MIDI cable) and stores the song into MIDI file.
+
+TIP0023:
+GNMIDI creates ring tones for cell phones
+GNMIDI Shareware converts MIDI melody into RTTTL ring tones and reverse.
+
+TIP0024:
+Batch conversion
+GNMIDI contains some operations that can be applied in one operation to all files in a folder tree.
+Among them you also find the comfortable format 1 to 0 batch conversion and checking validity of all MIDI files in your archive.
+
+TIP0025:
+Sysex dump transfer
+GNMIDI Shareware receives and sends Sysex data through MIDI cable between computer and keyboard.
+This can be used to transfer and store current settings or song data.
+
+TIP0026:
+Synchronize song text with GNMIDI (Karaoke text editor)
+GNMIDI contains a karaoke editor to enter and synchronize song text syllables to melody notes.
+
+TIP0027:
+Synchronize song lines during playing (Synchronization editor)
+Synchronization of text lines works very quick and easy with GNMIDI synchronization editor: 
+While song plays in this editor press a key at the time when next line should be sung. 
+GNMIDI stores the lines and synchronized times into the MIDI song.
+
+
+TIP0028:
+Languages
+GNMIDI software is available in languages English and German. 
+
+TIP0029:
+Questions about software or registration
+You can reach us by email at info@gnmidi.com if you have questions.
+
+TIP0030:
+GNMIDI is not finished yet
+GNMIDI Shareware is not a still project, updated versions are available several times per year.
+Registered GNMIDI users don't need to purchase upgrades. GNMIDI registration is valid for all upgrade versions till 2.99

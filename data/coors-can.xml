@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<gfx-xform version="1">
+    <input file="./images/coors-can.png" type="png" tile-width="8" tile-height="8"/>
+    <output file="./coors-can.inc">
+        <tiles var-name="coorsCan"/>
+        <maps pointers-size="8">
+            <map var-name="coors_can_map" left="1" top="0" width="5" height="3"/>
+	</maps>	
+    </output>
+</gfx-xform>

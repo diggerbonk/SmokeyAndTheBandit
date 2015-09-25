@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<gfx-xform version="1">
+    <input file="./images/spacebar-logo.png" type="png" tile-width="8" tile-height="8"/>
+    <output file="./spacebar-logo.inc">
+        <tiles var-name="spacebarLogoTiles"/>
+        <maps pointers-size="8">
+            <map var-name="sbl_blank" left="0" top="0" width="1" height="1"/>
+            <map var-name="sbl_1" left="0" top="8" width="9" height="20"/>
+            <map var-name="sbl_2" left="0" top="0" width="9" height="8"/>
+	</maps>	
+    </output>
+</gfx-xform>

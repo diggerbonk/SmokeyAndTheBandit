@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<gfx-xform version="1">
+    <input file="./images/sprites.png" type="png" tile-width="8" tile-height="8"/>
+    <output file="./sprites.inc">
+        <tiles var-name="spritesTiles"/>
+        <maps pointers-size="8">
+            <map var-name="map_bandit" left="0" top="0" width="2" height="2"/>
+            <map var-name="map_banditShadow" left="2" top="0" width="2" height="2"/>
+            <map var-name="map_banditUp" left="0" top="2" width="2" height="2"/>
+            <map var-name="map_banditDown" left="0" top="4" width="2" height="2"/>
+            <map var-name="map_banditBig" left="2" top="2" width="2" height="2"/>
+            <map var-name="map_enemy" left="0" top="6" width="2" height="2"/>
+            <map var-name="map_enemy2" left="2" top="4" width="2" height="2"/>
+            <map var-name="map_enemy3" left="2" top="6" width="2" height="2"/>
+            <map var-name="map_beer" left="4" top="0" width="1" height="1"/>
+	</maps>	
+    </output>
+</gfx-xform>
