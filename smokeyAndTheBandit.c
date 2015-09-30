@@ -228,8 +228,7 @@ char lastBeerSpawnLane = 1;
 // variables relating to trans-am position and physics.
 unsigned char banditX = 180;
 unsigned char banditY = 22;  // y screen position
-unsigned char banditZ = 1;   // z axis position (for jumping)
-unsigned char banditZDirection = 0; // this determines direction of jump
+unsigned char banditZ = 0;   // z axis position (for jumping)
 
 unsigned char numCredits = 0;
 unsigned char creditDebounce = 0;
@@ -362,8 +361,7 @@ void playGame()  {
     banditSpeed = minSpeed;
     banditX = 190 - (4*banditSpeed);
     banditY = LANE2; // start bendit in the 2nd lane
-    banditZ = 1;
-    banditZDirection = 0;
+    banditZ = 0;
     nextYPos = banditY;
     nextXPos = banditX;
 
@@ -499,31 +497,25 @@ void playGame()  {
         }
 
 
-        if (banditZDirection == 1) {
-            banditZ++;
-            if (banditZ > 16) {
-                MapSprite2(MAX_BEERS, map_banditBig, 0);
-                banditZDirection = 2;    
-                TriggerNote(0, 3, 28+(2*banditSpeed), 192);
-            }
-        }
-        else if (banditZDirection == 2) {
-            banditZ++;
-            if (banditZ > 32) {
-                MapSprite2(MAX_BEERS, map_banditDown, 0);
-                banditZDirection = 3;
-                banditZ = 8;
-                TriggerNote(0, 3, 23+(2*banditSpeed), 164);
-            }
-        }
-        else if (banditZDirection == 3) {
-            banditZ--;
-            if (banditZ == 1) {
+        // process bandit jumping: load jumping sprites, update 
+        // sounds.
+		if (banditZ > 0) {
+			banditZ++;
+			if (banditZ == 36) {
                 MapSprite2(MAX_BEERS, map_bandit, 0);
-                banditZDirection = 0;
                 TriggerNote(0, 3, 20+(2*banditSpeed), 128);
-            }
-        }
+                banditZ = 0;
+			}
+			else if (banditZ == 24) {
+                MapSprite2(MAX_BEERS, map_banditDown, 0);
+                TriggerNote(0, 3, 23+(2*banditSpeed), 164);
+			}
+			else if (banditZ == 12) {
+                MapSprite2(MAX_BEERS, map_banditBig, 0);
+                TriggerNote(0, 3, 28+(2*banditSpeed), 192);
+		 	}
+		}
+
         
         if (banditY < nextYPos) {
             banditY+=4;
@@ -541,7 +533,7 @@ void playGame()  {
         processGameControls();
 
         // do bounds checking here, but only if we're not jumping
-        if (banditZDirection == 0) {
+        if (banditZ == 0) {
             unsigned char minY = courseRightBoundary[((Screen.scrollX/8)+(banditX/8))%32];
             unsigned char maxY = courseLeftBoundary[((Screen.scrollX/8)+(banditX/8))%32];
 
@@ -724,7 +716,7 @@ void processGameControls() {
     processCredits(joy1, joy2);
 
     if (buttonReset == 0) {
-        if (banditZDirection == 0) {
+        if (banditZ == 0) {
             if (joy1&BTN_RIGHT) {
                 if (nextYPos > 32) {
                     nextYPos -= 32;
@@ -752,9 +744,8 @@ void processGameControls() {
                 TriggerNote(0, 3, 20+(banditSpeed*2), 128);
             }
             else if(joy1&BTN_X){
-               //TriggerFx(0,0x60,true);
+                banditZ = 1;
                 MapSprite2(MAX_BEERS, map_banditUp, 0);
-                banditZDirection = 1;
                 TriggerNote(0, 3, 23+(2*banditSpeed), 164);
 	        }
         }

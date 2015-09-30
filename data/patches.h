@@ -33,14 +33,9 @@
 	only two bytes (no parameter).
 */
 
-////INST: east bound and down lead
-//const char patch00[] PROGMEM ={ 
-//    0,PC_WAVE,3,
-//    0,PC_ENV_SPEED,-10,
-//    0,PATCH_END
-//};
 
-//INST: organ (east bound and down lead)
+// low pitch used for engine noise
+// at higher pitches it is used for the synth lead
 const char patch00[] PROGMEM ={	
 0,PC_WAVE,9,
 1,PC_ENV_VOL,192,
@@ -49,12 +44,6 @@ const char patch00[] PROGMEM ={
 0,PATCH_END
 };
 
-//INST: east bound and down bass
-/*const char patch01[] PROGMEM ={ 
-    0,PC_WAVE,3,
-    0,PC_ENV_SPEED,-1,
-    0,PATCH_END
-};*/
 const char patch01[] PROGMEM ={//Music Demo	
 0,PC_WAVE,3,
 1,PC_ENV_VOL,192,
@@ -103,7 +92,9 @@ const char patch05[] PROGMEM ={
 
 
 
-// engine
+
+//
+// Caught a beer sound
 
 const char patch06[] PROGMEM ={
 0,PC_WAVE,3,
@@ -158,7 +149,9 @@ const char patch07[] PROGMEM ={// turn noise
 0,PATCH_END,0,
 };
 
-const char patch08[] PROGMEM ={// explosion!
+// 
+// Car crash
+const char patch08[] PROGMEM ={
 0,PC_ENV_VOL,127,
 0,PC_WAVE,10, 
 0,PC_ENV_SPEED,-1, 
@@ -226,14 +219,14 @@ const char patch08[] PROGMEM ={// explosion!
 };
 
 const struct PatchStruct patches[] PROGMEM = {
-    {0,NULL,patch00,0,0}, // 
+    {0,NULL,patch00,0,0}, // synth lead
     {0,NULL,patch01,0,0}, // bass
-    {0,NULL,patch02,0,0},
-    {0,NULL,patch03,0,0},
-    {0,NULL,patch04,0,0},
-    {0,NULL,patch05,0,0},
-    {0,NULL,patch06,0,0},
-    {0,NULL,patch07,0,0},
-    {0,NULL,patch08,0,0},
+    {0,NULL,patch02,0,0}, // UNUSED
+    {0,NULL,patch03,0,0}, // engine noise
+    {0,NULL,patch04,0,0}, // coin-up, start
+    {0,NULL,patch05,0,0}, // UNUSEE
+    {0,NULL,patch06,0,0}, // car catches beer, clearing beers
+    {0,NULL,patch07,0,0}, // car turns left/right 
+    {0,NULL,patch08,0,0}, // car crashes, misses a beer
 };
 

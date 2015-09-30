@@ -1,3 +1,9 @@
+September 30, 2015
+
+    * Refactored jumping logic to use one less variable.
+    * Jumps are just a tad shorter now. This will make timing bridge 
+      jumps a little more difficult, but the car will land faster and so 
+      will be able to resume steering sooner (good for later stages).
 
 September 20, 2015
 
