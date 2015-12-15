@@ -202,20 +202,6 @@ const char textTable[] = {
     13, 14, 15, 16, 17, 18, 19 
 };
 
-// lookup table for printing integers. 
-const char numTable[] = {
-    RAM_TILES_COUNT+30,
-    RAM_TILES_COUNT+28,
-    RAM_TILES_COUNT+26,
-    RAM_TILES_COUNT+24,
-    RAM_TILES_COUNT+22,
-    RAM_TILES_COUNT+20,
-    RAM_TILES_COUNT+18,
-    RAM_TILES_COUNT+16,
-    RAM_TILES_COUNT+14,
-    RAM_TILES_COUNT+12
-};
-    
 // variables relating to beer placement
 struct BeerCan {
     bool enabled;
@@ -279,7 +265,6 @@ void dialogMode();
 void myPrint(int x,int y,const char *string);
 void slowPrint(int x,int y,const char *string);
 void myPrintInt(int x,int y, char len, unsigned int val);
-void myPrintChar(int x,int y,char c);
 void doScrolling(int speed);
 
 void processCredits(int joy1, int joy2);
@@ -772,14 +757,7 @@ void myPrint(int x,int y,const char *string){
 	while(1){
 		c=pgm_read_byte(&(string[i++]));		
 		if(c!=0){
-            if ((c&127) < 64) {
-                c = (63 - (c&127))*2;
-            }
-            else {
-                c = ((95 - (c&127))*2)+1;
-            }
-            c = c + RAM_TILES_COUNT;		
-			SetFont(x,textTable[y--],c);
+			PrintChar(x, textTable[y--], c);
 		}else{
 			break;
 		}
@@ -794,16 +772,9 @@ void slowPrint(int x,int y,const char *string){
 	char c;
 
 	while(1){
-		c=pgm_read_byte(&(string[i++]));		
+		c=pgm_read_byte(&(string[i++]));
 		if(c!=0){
-            if ((c&127) < 64) {
-                c = (63 - (c&127))*2;
-            }
-            else {
-                c = ((95 - (c&127))*2)+1;
-            }
-            c = c + RAM_TILES_COUNT;		
-			SetFont(x,textTable[y--],c);
+		    PrintChar(x, textTable[y--],c);
 		}else{
 			break;
 		}
@@ -814,28 +785,11 @@ void slowPrint(int x,int y,const char *string){
 
 //Print an unsigned byte in decimal
 void myPrintInt(int x,int y, char len, unsigned int val){
-	unsigned char c;
     while (len > 0) {
-		c=val%10;
-        SetFont(x, y++, numTable[c]);
+        PrintChar(x, y++, (val%10)+48);
         val = val / 10;
-        //if (val <= 0) break;
         len--;
 	}		
-}
-
-//Print a single character
-void myPrintChar(int x,int y,char c){
-
-    if ((c&127) < 64) {
-        c = (63 - (c&127))*2;
-    }
-    else {
-        c = ((95 - (c&127))*2)+1;
-    }
-    c = c + RAM_TILES_COUNT;		
-    SetFont(x,y,c);
-
 }
 
 void generateNextStripe(int increment) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <gfx-xform version="1">
     <input file="./images/fonts2.png" type="png" tile-width="8" tile-height="8"/>
-    <output file="./font.inc">
-        <tiles var-name="font_tileset"/>
+    <output file="./font2.inc">
+        <tiles var-name="font2_tileset"/>
         <maps pointers-size="8">
 	</maps>	
     </output>
