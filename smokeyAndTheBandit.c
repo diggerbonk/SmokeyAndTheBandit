@@ -109,7 +109,7 @@
 //     6) offset in the tile map where the tiles for the second strip are defined
 //     7) number of times to repeat this pattern
 
-unsigned char dirtRoad[] PROGMEM = {
+const unsigned char dirtRoad[] PROGMEM = {
     // single lane, right most
     LANE1-LANEOFFSET, LANE1+LANEOFFSET, 4, LANE1-LANEOFFSET, LANE1+LANEOFFSET, 5, 0,
     // double lane, right most
@@ -131,7 +131,7 @@ unsigned char dirtRoad[] PROGMEM = {
     LANE1+1, LANE1, 19, LANE1+2, LANE1, 18, 1
 };
 
-unsigned char highway[] PROGMEM= {
+const unsigned char highway[] PROGMEM= {
     // beer stage
     LANE1-LANEOFFSET, LANE4+LANEOFFSET, 2,  LANE1-LANEOFFSET, LANE4+LANEOFFSET, 3,  0,
 };

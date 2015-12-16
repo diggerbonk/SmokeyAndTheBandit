@@ -12,7 +12,7 @@ PACKROM = packrom
 INFO=../gameinfo.properties
 
 ## Kernel settings
-KERNEL_DIR = /home/trent/soft/uzebox/kernel
+KERNEL_DIR = ../kernel
 KERNEL_OPTIONS += -DSOUND_MIXER=1 
 KERNEL_OPTIONS += -DSOUND_CHANNEL_4_ENABLE=0
 KERNEL_OPTIONS += -DSOUND_CHANNEL_3_ENABLE=1
@@ -22,9 +22,16 @@ KERNEL_OPTIONS += -DVIDEO_MODE=3
 KERNEL_OPTIONS += -DSCROLLING=1
 KERNEL_OPTIONS += -DINTRO_LOGO=0 
 KERNEL_OPTIONS += -DOVERLAY_LINES=8
-#KERNEL_OPTIONS += -DSCREEN_TILES_H=28 // forced to 28 when scrolling is enabled
-#KERNEL_OPTIONS += -DSCREEN_TILES_V=28 // 28 by default, can be defined here
-#KERNEL_OPTIONS += -DFIRST_RENDER_LINE=20 // 20 by default, can be defined here.
+
+# forced to 28 when scrolling is enabled
+KERNEL_OPTIONS += -DSCREEN_TILES_H=28
+
+# 28 by default, can be defined here
+KERNEL_OPTIONS += -DSCREEN_TILES_V=28
+
+# 20 by default, can be defined here.
+KERNEL_OPTIONS += -DFIRST_RENDER_LINE=20
+
 # DEFAULT 20
 KERNEL_OPTIONS += -DVRAM_TILES_V=20
 KERNEL_OPTIONS += -DVRAM_TILES_H=32
@@ -54,7 +61,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 LDFLAGS = $(COMMON)
 LDFLAGS += -Wl,-Map=$(GAME).map 
 LDFLAGS += -Wl,-gc-sections 
-LDFLAGS += -Wl,--section-start,.noinit=0x800100 -Wl,--section-start,.data=0x800200
+LDFLAGS += -Wl,--section-start,.noinit=0x800100 -Wl,--section-start,.data=0x800280
 
 ## Intel Hex file production flags
 HEX_FLASH_FLAGS = -R .eeprom
