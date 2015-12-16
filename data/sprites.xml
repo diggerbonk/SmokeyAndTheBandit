@@ -9,6 +9,8 @@
             <map var-name="map_banditUp" left="0" top="2" width="2" height="2"/>
             <map var-name="map_banditDown" left="0" top="4" width="2" height="2"/>
             <map var-name="map_banditBig" left="2" top="2" width="2" height="2"/>
+            <map var-name="map_banditLeft" left="4" top="4" width="2" height="2"/>
+            <map var-name="map_banditRight" left="4" top="2" width="2" height="2"/>
             <map var-name="map_enemy" left="0" top="6" width="2" height="2"/>
             <map var-name="map_enemy2" left="2" top="4" width="2" height="2"/>
             <map var-name="map_enemy3" left="2" top="6" width="2" height="2"/>

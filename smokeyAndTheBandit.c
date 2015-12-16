@@ -504,16 +504,20 @@ void playGame()  {
         
         if (banditY < nextYPos) {
             banditY+=4;
+            if (banditY == nextYPos) MapSprite2(MAX_BEERS, map_bandit, 0);
         }
         else if (banditY > nextYPos) {
             banditY-=4;
+            if (banditY == nextYPos) MapSprite2(MAX_BEERS, map_bandit, 0);
         }
-        else if (banditX < nextXPos) {
-            banditX++;
-        }
-        else if (banditX > nextXPos) {
-            banditX--;
-        }
+        else {
+			if (banditX < nextXPos) {
+				banditX++;
+			}
+			else if (banditX > nextXPos) {
+				banditX--;
+			}
+		}
 
         processGameControls();
 
@@ -705,14 +709,23 @@ void processGameControls() {
             if (joy1&BTN_RIGHT) {
                 if (nextYPos > 32) {
                     nextYPos -= 32;
+                    MapSprite2(MAX_BEERS, map_banditRight, 0);
                 }
-                else nextYPos = 0;
+                else {
+					nextYPos = 0;
+				}
                 TriggerFx(7,0xff,true);
                 buttonReset = 2;
             }
             else if (joy1&BTN_LEFT) {
-                if (nextYPos == 0) nextYPos = LANE1;
-                else nextYPos += 32;
+                if (nextYPos == 0) {
+					nextYPos = LANE1;
+				}
+                else {
+					nextYPos += 32;
+                    MapSprite2(MAX_BEERS, map_banditLeft, 0);
+				}
+                MapSprite2(MAX_BEERS, map_banditLeft, 0);
                 TriggerFx(7,0xff,true);
                 buttonReset = 2;
             }

@@ -1,3 +1,7 @@
+December 16, 2015
+
+    * Animate car moving left and right
+
 December 15, 2015
 
     * Added 3.3 uzebox kernel to project.
