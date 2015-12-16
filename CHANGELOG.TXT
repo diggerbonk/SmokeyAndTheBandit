@@ -1,5 +1,10 @@
 December 15, 2015
 
+    * Added 3.3 uzebox kernel to project.
+    * Updated makefile to use included kernel sources
+
+December 15, 2015
+
     * Removed custom font tiles layout and direct calls to SetFont. 
 
 September 30, 2015
