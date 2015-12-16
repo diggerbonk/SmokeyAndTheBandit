@@ -46,11 +46,10 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99 -DF_CPU=28636360UL -Os -fsigned-char -ffunction-sections 
+CFLAGS += -Wall -gdwarf-2 -std=gnu99 -DF_CPU=28636360UL -Os -fsigned-char -ffunction-sections -fno-toplevel-reorder
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d
-CFLAGS += -mcall-prologues -fno-inline
+#CFLAGS += -mcall-prologues -fno-inline
 CFLAGS += $(KERNEL_OPTIONS)
-
 
 ## Assembly specific flags
 ASMFLAGS = $(COMMON)
@@ -61,7 +60,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 LDFLAGS = $(COMMON)
 LDFLAGS += -Wl,-Map=$(GAME).map 
 LDFLAGS += -Wl,-gc-sections 
-LDFLAGS += -Wl,--section-start,.noinit=0x800100 -Wl,--section-start,.data=0x800280
+LDFLAGS += -Wl,--section-start,.noinit=0x800100 -Wl,--section-start,.data=0x800200
 
 ## Intel Hex file production flags
 HEX_FLASH_FLAGS = -R .eeprom
