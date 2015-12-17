@@ -1,0 +1,15 @@
+Brief notes on how to convert midi into something useable by uzebox 
+on a Linux host system.
+
+* Start with a standard midi song
+* Open it with rosegarden
+* Reduce the tracks to 4 or less (preferably 2)
+* The uzebox doesn't support polyphony, so try and eliminate tracks that have it.
+* Remove all markers from the file
+* Create markers S (start) and E (end) at the start and end of the song
+* Save the resulting file (midi export)
+* Convert the file from midi type 1 to type 0 (wine ./tools/gn1to0.exe, "
+* Convert the midi file to an uzebox patch file:
+    java -cp uzetools.jar \
+        com.belogic.uzebox.tools.converters.midi.MidiConvert \
+        -f 6.5 input.mid output.h)

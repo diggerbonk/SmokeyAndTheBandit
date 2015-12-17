@@ -136,7 +136,7 @@ const unsigned char highway[] PROGMEM= {
     LANE1-LANEOFFSET, LANE4+LANEOFFSET, 2,  LANE1-LANEOFFSET, LANE4+LANEOFFSET, 3,  0,
 };
 
-#define COURSE_MAP_WIDTH 22
+#define COURSE_MAP_WIDTH 28
 char lastCourseLineGenerated = 0;
 unsigned char waterCounter = 0;
 char storeCourseLine = 0;
@@ -436,7 +436,7 @@ void playGame()  {
         }
             
         // move the playfield
-        doScrolling(banditSpeed);
+        doScrolling(banditSpeed/2);
 
         if (subStage == 1) {
             if (spawnCounter > 0) spawnCounter--;
@@ -462,7 +462,7 @@ void playGame()  {
                     return;
                 }
                 else {
-                    sprites[i].x = sprites[i].x + (banditSpeed);
+                    sprites[i].x = sprites[i].x + (banditSpeed/2);
                     // collision?
                     if ( sprites[i].x > (banditX-8) && 
                          sprites[i].y > (banditY-8) && 

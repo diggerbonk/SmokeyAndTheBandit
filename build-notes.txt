@@ -1,0 +1,8 @@
+Build Notes
+
+    * To update the the background tiles:
+        * cd ./data
+        * gconvert background.xml
+    * To update the sprites 
+        * cd ./data
+        * gconvert sprites.xml

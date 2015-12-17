@@ -7,7 +7,7 @@
             <map var-name="map_blank" left="0" top="0" width="1" height="1"/>
             <map var-name="map_enos" left="3" top="1" width="3" height="4"/>
             <map var-name="map_banditAvatar" left="0" top="1" width="3" height="4"/>
-            <map var-name="map_terrain" left="6" top="0" width="22" height="20"/>
+            <map var-name="map_terrain" left="6" top="0" width="28" height="20"/>
 	</maps>	
     </output>
 </gfx-xform>
