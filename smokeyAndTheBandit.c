@@ -1,7 +1,7 @@
 /*
  *  Smokey and the Bandit
  *  Copyright (C) 2013  Trent McNair
- * 
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@
 */
 
 //
-// Resolution is 224x224. 
+// Resolution is 224x224.
 // Veritical scrolling controlled by value of Screen.scrollY
 // Screen.scrollY can be a value from 0 to 255
 // For Y: 256 scroll points - 250 max resolution = 16.
@@ -26,22 +26,22 @@
 // Screen Layout (turned sideways - the game is vertially oriented)
 //
 // +-------------------------+
-// |     status area         | 
-// |     224x64              | 
-// +-------------------------+  
+// |     status area         |
+// |     224x64              |
+// +-------------------------+
 // |     playfield           |
 // |     224x160             |
-// |                         | 
-// |                         |   
+// |                         |
+// |                         |
 // +-------------------------+
 //
 // * The road is 160 pixels, or 20 tiles wide
-// * The driveable road width is defined by roadStart and roadEnd 
+// * The driveable road width is defined by roadStart and roadEnd
 //   variables, these are used for car/wall collision detection.
-// 
+//
 // 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19
-// 
-// The driving course is made up of vertical strips of tile measuring 
+//
+// The driving course is made up of vertical strips of tile measuring
 // 2x20 each. Each strip is defined in a 7 byte array:
 //     1) top right border (how far the car can move right)
 //     2) top left border (how far the car can move left)
@@ -52,7 +52,7 @@
 //     7) Number of times to repeat this strip
 //
 // UZEM keyboard mappint (make sure to start with option -2)
-// 
+//
 //     o - coin up
 //     u - coin up
 //     w - p1 right
@@ -69,7 +69,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/pgmspace.h>
-#include <uzebox.h>  
+#include <uzebox.h>
 
 #include "data/patches.h"
 #include "data/east.h"
@@ -90,7 +90,7 @@
 #define LANEOFFSET 12
 
 //
-// Table defining strips of track. Each strip is 2x20 tiles and is 
+// Table defining strips of track. Each strip is 2x20 tiles and is
 // defined by 7 values in the table:
 //
 // +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -99,7 +99,7 @@
 // |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 // +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 //
-// Table defining the track. Each row has 7 values, they are used to randomly 
+// Table defining the track. Each row has 7 values, they are used to randomly
 // generate the track as the game progresses.
 //     1) right side of road first row
 //     2) left side of road on first row
@@ -113,15 +113,15 @@ const unsigned char dirtRoad[] PROGMEM = {
     // single lane, right most
     LANE1-LANEOFFSET, LANE1+LANEOFFSET, 4, LANE1-LANEOFFSET, LANE1+LANEOFFSET, 5, 0,
     // double lane, right most
-    LANE1-LANEOFFSET, LANE2+LANEOFFSET, 12, LANE1-LANEOFFSET, LANE2+LANEOFFSET, 13, 3, 
+    LANE1-LANEOFFSET, LANE2+LANEOFFSET, 12, LANE1-LANEOFFSET, LANE2+LANEOFFSET, 13, 3,
     // single lane, right of center
-    LANE2-LANEOFFSET, LANE2+LANEOFFSET, 6, LANE2-LANEOFFSET, LANE2+LANEOFFSET, 7, 0,  
+    LANE2-LANEOFFSET, LANE2+LANEOFFSET, 6, LANE2-LANEOFFSET, LANE2+LANEOFFSET, 7, 0,
     // double lane, middle
-    LANE2-LANEOFFSET, LANE3+LANEOFFSET, 14, LANE2-LANEOFFSET, LANE3+LANEOFFSET, 15, 3, 
+    LANE2-LANEOFFSET, LANE3+LANEOFFSET, 14, LANE2-LANEOFFSET, LANE3+LANEOFFSET, 15, 3,
     // single lane, left of center
-    LANE3-LANEOFFSET, LANE3+LANEOFFSET, 8, LANE3-LANEOFFSET, LANE3+LANEOFFSET, 9, 0,  
+    LANE3-LANEOFFSET, LANE3+LANEOFFSET, 8, LANE3-LANEOFFSET, LANE3+LANEOFFSET, 9, 0,
     // double lane, left most
-    LANE3-LANEOFFSET, LANE4+LANEOFFSET, 16, LANE3-LANEOFFSET, LANE4+LANEOFFSET, 17, 3, 
+    LANE3-LANEOFFSET, LANE4+LANEOFFSET, 16, LANE3-LANEOFFSET, LANE4+LANEOFFSET, 17, 3,
     // single lane, left most
     LANE4-LANEOFFSET, LANE4+LANEOFFSET, 10, LANE4-LANEOFFSET, LANE4+LANEOFFSET, 11, 0,
 
@@ -140,8 +140,8 @@ const unsigned char highway[] PROGMEM= {
 char lastCourseLineGenerated = 0;
 unsigned char waterCounter = 0;
 char storeCourseLine = 0;
-  
-// Game stages. Each stage increases the speed and the variance 
+
+// Game stages. Each stage increases the speed and the variance
 // in beer placement.
 
 #define MAX_STAGES 16
@@ -149,7 +149,7 @@ char storeCourseLine = 0;
 #define MIN_SPEED 1
 #define MAX_SPEED 5
 
-// Minimum speed by stage. 
+// Minimum speed by stage.
 // MAKE SURE WE HAVE MAX_STAGES ENTRIES!
 const unsigned char minSpeedTable[] PROGMEM = {
     2, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5
@@ -168,25 +168,25 @@ const char roadVarianceTable[] PROGMEM = {
     5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1
 };
 
-// format for each stage: 
+// format for each stage:
 //     <lead up>, <beerStageLen>, <dodgeLen>, <after>
 const unsigned char stageLengthTable[] PROGMEM = {
-    3, 20, 3, 60, 5, 
-    3, 21, 3, 70, 5, 
-    3, 22, 3, 80, 5, 
-    3, 23, 3, 90, 5, 
-    3, 24, 3, 100, 5, 
-    3, 25, 3, 100, 5, 
-    3, 26, 3, 100, 5, 
-    3, 27, 3, 110, 5, 
-    3, 28, 3, 110, 5, 
-    3, 29, 3, 110, 5, 
-    3, 30, 3, 120, 5, 
-    3, 31, 3, 130, 5, 
-    3, 32, 3, 140, 5, 
-    3, 33, 3, 150, 5, 
-    3, 34, 3, 160, 5, 
-    3, 35, 3, 170, 5, 
+    3, 20, 3, 60, 5,
+    3, 21, 3, 70, 5,
+    3, 22, 3, 80, 5,
+    3, 23, 3, 90, 5,
+    3, 24, 3, 100, 5,
+    3, 25, 3, 100, 5,
+    3, 26, 3, 100, 5,
+    3, 27, 3, 110, 5,
+    3, 28, 3, 110, 5,
+    3, 29, 3, 110, 5,
+    3, 30, 3, 120, 5,
+    3, 31, 3, 130, 5,
+    3, 32, 3, 140, 5,
+    3, 33, 3, 150, 5,
+    3, 34, 3, 160, 5,
+    3, 35, 3, 170, 5,
 };
 
 unsigned char stageLength = 0;
@@ -198,8 +198,8 @@ char roadVariance = 10;
 
 const char textTable[] = {
     20, 21, 22, 23, 24, 25, 26, 27, 0, 1,
-    2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
-    13, 14, 15, 16, 17, 18, 19 
+    2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+    13, 14, 15, 16, 17, 18, 19
 };
 
 // variables relating to beer placement
@@ -246,7 +246,7 @@ char randomNumber;
 
 // length of the course[] array
 
-// track the the curently displayed left and right road boundaries for 
+// track the the curently displayed left and right road boundaries for
 // all 28 rows of on-screen road
 unsigned char courseRightBoundary[32];
 unsigned char courseLeftBoundary[32];
@@ -274,7 +274,7 @@ void displayHighScoresScreen();
 void waitCycle();
 
 void transitionScreen(
-        const char * line1, 
+        const char * line1,
         unsigned char line1len,
         bool showCoors);
 void highScoreScreen(unsigned int);
@@ -282,7 +282,7 @@ void carCrash();
 void smokeyAndTheBanditLogoScreen();
 
 int main() {
-	
+
 	InitHighScores();
 
 	Screen.overlayHeight=8;
@@ -297,18 +297,18 @@ int main() {
         if (gameMode == 3) playGame();
         else waitCycle();
     }
-} 
+}
 
 // initialize the screen
-//    * clear the vram 
-//    * tile the screen with all black tiles. 
+//    * clear the vram
+//    * tile the screen with all black tiles.
 
 void initScreen(bool spriteVisibility) {
 
     ClearVram();
 
-    // clear the screen by filling it with black tiles.  seems like ClearVram 
-    // should do this, but if we don't do this we get garbage showing up in 
+    // clear the screen by filling it with black tiles.  seems like ClearVram
+    // should do this, but if we don't do this we get garbage showing up in
     // the overlay area
     unsigned char c;
     for (unsigned char x=0; x<28; x++) {
@@ -387,15 +387,15 @@ void playGame()  {
     initScreen(true);
 
     MapSprite2(MAX_BEERS, map_bandit, 0);
-    
+
 
     if (currentPlayer == 0) myPrint(0,6, PSTR("P1"));
     else myPrint(0,6, PSTR("P2"));
-    
+
     myPrint(3,6, PSTR("STAGE"));
     myPrint(4,2, PSTR("-"));
     myPrint(26, 6, PSTR("CREDIT"));
-    
+
     printStats();
 
     MoveSprite(MAX_BEERS, banditX, banditY, 2, 2);
@@ -405,7 +405,7 @@ void playGame()  {
     }
 
     for (unsigned char i=0; i<MAX_BEERS; i++) {
-        MapSprite2(i, map_beer, 0); 
+        MapSprite2(i, map_beer, 0);
         sprites[i].x = OFF_SCREEN;
         sprites[i].y = 0;
     }
@@ -434,7 +434,7 @@ void playGame()  {
             printStats();
             frameCounter = 0;
         }
-            
+
         // move the playfield
         doScrolling(banditSpeed/2);
 
@@ -449,7 +449,7 @@ void playGame()  {
         // move the car
         MoveSprite(MAX_BEERS, banditX, banditY, 2, 2);
 
-        // move the beer cans 
+        // move the beer cans
         for (unsigned char i=0; i<MAX_BEERS; i++) {
             if (beerCans[i].enabled) {
                 if (sprites[i].x > 220) {
@@ -464,10 +464,10 @@ void playGame()  {
                 else {
                     sprites[i].x = sprites[i].x + (banditSpeed/2);
                     // collision?
-                    if ( sprites[i].x > (banditX-8) && 
-                         sprites[i].y > (banditY-8) && 
-                         sprites[i].x < (banditX+16) && 
-                         sprites[i].y < (banditY+16) ) { 
+                    if ( sprites[i].x > (banditX-8) &&
+                         sprites[i].y > (banditY-8) &&
+                         sprites[i].x < (banditX+16) &&
+                         sprites[i].y < (banditY+16) ) {
                             TriggerFx(6,0xff,true);
                             beerCans[i].enabled = false;
                             sprites[i].x = OFF_SCREEN;
@@ -482,7 +482,7 @@ void playGame()  {
         }
 
 
-        // process bandit jumping: load jumping sprites, update 
+        // process bandit jumping: load jumping sprites, update
         // sounds.
 		if (banditZ > 0) {
 			banditZ++;
@@ -501,7 +501,7 @@ void playGame()  {
 		 	}
 		}
 
-        
+
         if (banditY < nextYPos) {
             banditY+=4;
             if (banditY == nextYPos) MapSprite2(MAX_BEERS, map_bandit, 0);
@@ -530,7 +530,7 @@ void playGame()  {
                 carCrash();
                 endTurn();
                 return;
-                
+
             }
         }
 
@@ -603,7 +603,7 @@ void clearCans()
             TriggerFx(6,0xff,true);
             beerCans[i].enabled = false;
             sprites[i].x = OFF_SCREEN;
-            MapSprite2(i, map_beer, 0); 
+            MapSprite2(i, map_beer, 0);
 
             for (int i=0; i<7; i++) {
                 processControlsAndWait(2);
@@ -654,15 +654,15 @@ void processCredits(int joy1, int joy2) {
 
     // uzebox jamma mapping
     //     <uzebox> | <jamma function> | <jamma pin>  |  <uzem keyboard>
-    // 
-    //     BTN_SL(0)      : Service         : R    
+    //
+    //     BTN_SL(0)      : Service         : R
     //     BTN_SR(0)      : Test            : 15
     //     BTN_START(0)   : 1 player start  : 17    : z
     //     BTN_SELECT(0)  : 2 player start  : U     : x
     //     BTN_START(1)   : Tilt            : S
     //     BTN_L(1)       : Coin 1          : 16    : u
     //     BTN_R(1)       : Coin 2          : T     : o
-    //     BTN_X(*)       : Button 1        : 22    : 
+    //     BTN_X(*)       : Button 1        : 22    :
 
     if (creditDebounce > 0) creditDebounce--;
 
@@ -748,7 +748,7 @@ void processGameControls() {
 	        }
         }
     }
-    else if (!(joy1&BTN_UP) && !(joy1&BTN_DOWN)&& !(joy1&BTN_RIGHT)&& !(joy1&BTN_LEFT)) buttonReset--; 
+    else if (!(joy1&BTN_UP) && !(joy1&BTN_DOWN)&& !(joy1&BTN_RIGHT)&& !(joy1&BTN_LEFT)) buttonReset--;
 }
 
 void processControlsAndWait(unsigned char waitFor)
@@ -768,14 +768,14 @@ void myPrint(int x,int y,const char *string){
 	char c;
 
 	while(1){
-		c=pgm_read_byte(&(string[i++]));		
+		c=pgm_read_byte(&(string[i++]));
 		if(c!=0){
 			PrintChar(x, textTable[y--], c);
 		}else{
 			break;
 		}
 	}
-	
+
 }
 
 //Print a string from flash
@@ -793,7 +793,7 @@ void slowPrint(int x,int y,const char *string){
 		}
         processControlsAndWait(5);
 	}
-	
+
 }
 
 //Print an unsigned byte in decimal
@@ -802,7 +802,7 @@ void myPrintInt(int x,int y, char len, unsigned int val){
         PrintChar(x, y++, (val%10)+48);
         val = val / 10;
         len--;
-	}		
+	}
 }
 
 void generateNextStripe(int increment) {
@@ -836,12 +836,12 @@ void generateNextStripe(int increment) {
                 }
                 else {
                     unsigned char r = (unsigned char)randomNumber;
-                    
+
                     playerScore[currentPlayer] += (banditSpeed*(banditSpeed/2));
-                    
+
                     // update the course.
                     if (r > 128) {
-                        lastCourseLineGenerated++;            
+                        lastCourseLineGenerated++;
                     }
                     else {
                         lastCourseLineGenerated--;
@@ -873,7 +873,7 @@ void generateNextStripe(int increment) {
             stageStep++;
 
         }
-       
+
         unsigned char y = 0;
 
         if (stripeToggle > 0) {
@@ -903,16 +903,16 @@ void generateNextStripe(int increment) {
 }
 
 
-void spawnBeer(char sc) 
+void spawnBeer(char sc)
 {
     for (int i=0; i<MAX_BEERS; i++) {
         if (!beerCans[i].enabled) {
             beerCans[i].enabled = true;
             sprites[i].x = 0;
 
-            // divide random char by beerVariance. beerVariance is a positive 
-            // integeter between [0-127]. The result should be 0, > 0 or < 0 
-            // The car moves per the direction of the result, if the car is 
+            // divide random char by beerVariance. beerVariance is a positive
+            // integeter between [0-127]. The result should be 0, > 0 or < 0
+            // The car moves per the direction of the result, if the car is
             // on the border, it will move the opposite direction.
             char c = (char)sc/beerVariance;
             if (c > 0) {
@@ -955,7 +955,7 @@ void spacebarLogoScreen() {
        processControlsAndWait(1);
        if (gameMode > 2) return;
     }
-    
+
 	DrawMap2(2,0,sbl_1);
 	DrawMap2(2,20,sbl_2);
 
@@ -995,7 +995,7 @@ void smokeyAndTheBanditLogoScreen()
        processControlsAndWait(1);
        if (gameMode > 2) return;
     }
-    
+
 	DrawMap2(6,0,sabl_1);
 	DrawMap2(6,23,sabl_2);
 
@@ -1015,7 +1015,7 @@ void smokeyAndTheBanditLogoScreen()
     if (gameMode > 2) return;
     slowPrint(19,21, PSTR("1 COIN 1 CREDIT"));
     if (gameMode > 2) return;
-    
+
     for (int i = 0; i < 440; i++) {
        processControlsAndWait(1);
        if (gameMode > 2) return;
@@ -1052,7 +1052,7 @@ void dialogMode() {
 
     FadeIn(0, true);
 
-    DrawMap2(3, 15, map_banditAvatar); 
+    DrawMap2(3, 15, map_banditAvatar);
     slowPrint(3,LEFT_DIALOG_POS,PSTR("GETTIN' TO\0"));
     if (gameMode > 2) return;
     slowPrint(4,LEFT_DIALOG_POS,PSTR("TEXARKANA AND BACK\0"));
@@ -1064,7 +1064,7 @@ void dialogMode() {
     processControlsAndWait(40);
     if (gameMode > 2) return;
 
-    DrawMap2(8, 15, map_enos); 
+    DrawMap2(8, 15, map_enos);
 
     slowPrint(8,LEFT_DIALOG_POS ,PSTR("IT AIN'T NEVER\0"));
     if (gameMode > 2) return;
@@ -1075,10 +1075,10 @@ void dialogMode() {
     processControlsAndWait(40);
     if (gameMode > 2) return;
 
-    DrawMap2(12, 15, map_banditAvatar); 
+    DrawMap2(12, 15, map_banditAvatar);
     slowPrint(12,LEFT_DIALOG_POS ,PSTR("- BUT COORS BEER,\0"));
     if (gameMode > 2) return;
-    slowPrint(13,LEFT_DIALOG_POS ,PSTR("YOU TAKE THAT EAST\0")); 
+    slowPrint(13,LEFT_DIALOG_POS ,PSTR("YOU TAKE THAT EAST\0"));
     if (gameMode > 2) return;
     slowPrint(14,LEFT_DIALOG_POS ,PSTR("OF TEXAS... AND\0"));
     if (gameMode > 2) return;
@@ -1093,8 +1093,8 @@ void dialogMode() {
     processControlsAndWait(30);
     if (gameMode > 2) return;
 
-    DrawMap2(19, 15, map_enos); 
-    slowPrint(19,LEFT_DIALOG_POS ,PSTR("BECAUSE WE'RE\0\0\0\0\0\0")); 
+    DrawMap2(19, 15, map_enos);
+    slowPrint(19,LEFT_DIALOG_POS ,PSTR("BECAUSE WE'RE\0\0\0\0\0\0"));
     if (gameMode > 2) return;
     slowPrint(20,LEFT_DIALOG_POS ,PSTR("THIRSTY, DUMMY.\0\0\0"));
     if (gameMode > 2) return;
@@ -1110,8 +1110,8 @@ void dialogMode() {
 }
 
 void transitionScreen(
-        const char * line1, 
-        unsigned char line1len, 
+        const char * line1,
+        unsigned char line1len,
         bool showCoors)
 {
 
@@ -1150,7 +1150,7 @@ void transitionScreen(
            processControlsAndWait(1);
         }
     }
-    
+
     FadeOut(0, true);
 }
 
@@ -1182,9 +1182,9 @@ void highScoreScreen(unsigned int score)
     FadeIn(1, true);
 
     unsigned char currentLetter = 0;
-    char initials[3] = { 65, ' ', ' ' };
+    char initials[3] = { 'A', ' ', ' ' };
     u32 timer = 0;
-    
+
     while (true) {
 		timer++;
 		if (timer > 1000) break;
@@ -1197,12 +1197,14 @@ void highScoreScreen(unsigned int score)
 
             if (joy1&BTN_RIGHT) {
                 buttonReset = 3;
-                if (initials[currentLetter] == 'Z') initials[currentLetter] = 'A';
+                if (initials[currentLetter] == 'Z') initials[currentLetter] = ' ';
+                else if (initials[currentLetter] == ' ') initials[currentLetter] = 'A';
                 else initials[currentLetter] = initials[currentLetter] + 1;
             }
             else if (joy1&BTN_LEFT) {
                 buttonReset = 3;
-                if (initials[currentLetter] == 'A') initials[currentLetter] = 'Z';
+                if (initials[currentLetter] == ' ') initials[currentLetter] = 'Z';
+                else if (initials[currentLetter] == 'A') initials[currentLetter] = ' ';
                 else initials[currentLetter] = initials[currentLetter] - 1;
             }
 
@@ -1213,23 +1215,26 @@ void highScoreScreen(unsigned int score)
                 currentLetter++;
                 if (currentLetter < 3) initials[currentLetter] = 'A';
             }
+
         }
         else if (!(joy1&BTN_X) && !(joy1&BTN_LEFT)&& !(joy1&BTN_RIGHT)) {
             buttonReset--;
+        }
+
+        for (unsigned char i=0; i<3; i++) {
+            if (i == currentLetter) {
+                SetFont(20,8-i,RAM_TILES_COUNT + 28);
+            }
+            else {
+                SetFont(20,8-i,RAM_TILES_COUNT);
+            }
         }
 
         char c;
 	    for (unsigned char i=0; i<3; i++) {
 
             c = initials[i];
-
-            if ((c&127) < 64) {
-                c = (63 - (c&127))*2;
-            }
-            else {
-                c = ((95 - (c&127))*2)+1;
-            }
-            c = c + RAM_TILES_COUNT;	
+            c = c + RAM_TILES_COUNT - 32;
             SetFont(19,8-i,c);
         }
 
@@ -1238,7 +1243,7 @@ void highScoreScreen(unsigned int score)
             break;
         }
     }
-    
+
     NewHighScore(initials[0], initials[1], initials[2], score);
 
     FadeOut(1,true);
@@ -1246,9 +1251,9 @@ void highScoreScreen(unsigned int score)
 
 
 //
-// 
+//
 //          High Scores
-//    
+//
 //    TOM  .............  000678
 //         .............  000000
 
@@ -1262,7 +1267,7 @@ void displayHighScoresScreen()
 
     // make sure we're dark while setting up the screen
     FadeOut(0,true);
-    
+
     //myPrint(26, 6, PSTR("CREDIT"));
     printCredits();
 
@@ -1272,28 +1277,23 @@ void displayHighScoresScreen()
     }
 
     // print message
-    myPrint(5,26, PSTR("       HIGH SCORES")); 
+    myPrint(5,26, PSTR("       HIGH SCORES"));
 
     for (unsigned char i = 0; i<MAX_HIGH_SCORES; i++) {
 		u32 score;
 		char initials[3];
-		
+
 		GetHighScore(i, &initials[0], &initials[1], &initials[2], &score);
-		
+
         if (score == 0) break;
 	    for (unsigned char j=0; j<3; j++) {
             char c = initials[j];
+            if (c != ' ' && (c < 'A' || c > 'Z')) c = ' ';
 
-            if ((c&127) < 64) {
-                c = (63 - (c&127))*2;
-            }
-            else {
-                c = ((95 - (c&127))*2)+1;
-            }
-            c = c + RAM_TILES_COUNT;	
+            c = c + RAM_TILES_COUNT - 32;
 
             SetFont(8+(i*2),textTable[25-j],c);
-            
+
 			myPrint(8+(i*2), 22, PSTR(" ............. "));
 			myPrintInt(8+(i*2),22,6,score);
 		}

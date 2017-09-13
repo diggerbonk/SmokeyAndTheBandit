@@ -1,5 +1,7 @@
 Build Notes
 
+    * yum install avr-gcc
+    * yum install avr-libc
     * To update the the background tiles:
         * cd ./data
         * gconvert background.xml
